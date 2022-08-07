@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import requests
 import json
 
@@ -25,6 +28,7 @@ class WeChatAPI():
             print('Timeout, did not get access_token')
             return 'error'
 
+        # print(response.json()['access_token'])
         return response.json()['access_token']
 
     def update_token(self):
@@ -44,15 +48,15 @@ class WeChatAPI():
         try:
             response = requests.post(self.send_api, data=data, timeout=10).json()
         except:
-            print('请求超时，无法发送消息')
+            print('Timeout, Do not send message')
             return
         if response['errcode']==42001 or response['errcode']==40014:
             self.update_token()
             self.send_text_message(title, text, agent_id=agent_id, touser=touser)
         elif response['errcode'] == 0:
-            print(title, '发送成功')
+            print(title, 'Send Successfully!')
         else:
-            print('发送失败')
+            print('Send Failed!')
             print('data: ', data)
             print('response: ', response)
             print('token: ', self.access_token)
